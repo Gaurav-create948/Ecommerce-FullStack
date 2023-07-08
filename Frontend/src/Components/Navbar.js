@@ -7,7 +7,7 @@ import { AuthContext } from './Context/authContext.js';
 
 const Navbar = ({ setProducts }) => {
 
-  const {setForm} = useContext(AuthContext);
+  const { setForm } = useContext(AuthContext);
 
 
   const searchValues = ["electronics", "jewelery", "men's clothing", "women's clothing"];
@@ -23,16 +23,20 @@ const Navbar = ({ setProducts }) => {
   }
 
   return (
-    <div className='flex flex-wrap my-10'>
-      <div className='logo w-[20%] mx-auto text-center'>
-        <h2 className='text-slate-700 text-3xl'><Link>Shop Now</Link></h2>
+    <div className='container flex item-center justify-around my-10'>
+
+      <Link to='/' className='my-auto'>
+        <img src='../images/ecommerce-logo.png' className='h-[100px] w-[100px]' />
+      </Link>
+
+
+      <div className='flex w-[45%] my-auto'>
+        <input className="w-full p-3 outline-none border-b-[1.5px] border-slate-200" type="text" placeholder='search' />
+        <i className="fa-solid fa-magnifying-glass m-auto text-2xl" type="submit" onClick={handleSubmit}></i>
       </div>
-      <div className='w-[60%] flex border rounded-md border-slate-300'>
-        <input className="block w-full rounded-md px-3.5 py-2 shadow-sm" type="text" placeholder='search' />
-        <i className="fa-solid fa-magnifying-glass text-3xl mx-2 my-2" type="submit" onClick={handleSubmit}></i>
-      </div>
-      <div className="flex mx-auto ml-auto w-[20%]">
-        <Link to={'/cart'}>
+
+      <div className='flex my-auto gap-5'>
+        <Link to='/cart'>
           <i className="fa-solid fa-cart-arrow-down text-3xl mx-2 my-2"></i>
         </Link>
         <i className="fa-solid fa-user text-3xl mx-2 my-2 hover:cursor-pointer" onClick={() => setForm()}></i>

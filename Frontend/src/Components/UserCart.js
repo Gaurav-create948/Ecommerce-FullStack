@@ -5,8 +5,8 @@ import { AuthContext } from './Context/authContext';
 // import {checkUser, getCookie} from './CheckValidUser';
 
 const UserCart = () => {
-    const [usersCart, setUsersCart] = useState([]);
     const { currentUser } = useContext(AuthContext);
+    const [deleteItem, setDeleteItem] = useState(false);
 
     const queryClient = new QueryClient();
 
@@ -20,10 +20,9 @@ const UserCart = () => {
     })
 
     const mutation = useMutation(
-        async (count) => {
+        async (data) => {
             try {
-                const res = axios.patch('http://localhost:5000/cart', { count });
-                console.log(res);
+                return !data.user_ref_id ? await axios.patch('http://localhost:5000/cart', {data}) : axios.patch('http://localhost:5000/cart/deleteCartItem', {data});
             } catch (error) {
                 console.log(error);
             }
@@ -35,44 +34,62 @@ const UserCart = () => {
         }
     );
 
-    function updateQuantity() {
-        document.querySelector('.quantity')
+    function updateQuantity(data, e) {
+        const btn = e.target.closest('.btn').textContent;
+        let newQuantity;
+        if (btn === '+') {
+            // Increase the quantity and price
+            newQuantity = data.product_quantity + 1;
+            mutation.mutate({ newQuantity, user_id: data.user_ref_id, product_id: data.product_id });
+        }
+        else {
+            // Decrease the quantity and price
+            newQuantity = data.product_quantity - 1;
+            mutation.mutate({ newQuantity, user_id: data.user_ref_id, product_id: data.product_id });
+        }
     }
 
+
     return (
-        <div className='container flex'>
-            <div className='container left'>
-                <table className='flex flex-col gap-10 mx-10 text-center'>
-                    <tr className='flex justify-between'>
-                        <th><p className='font-thin text-slate-400 text-center'>product</p></th>
-                        <th><p className='font-thin text-slate-400 text-center'>quantity</p></th>
-                        <th><p className='font-thin text-slate-400 text-center'>price</p></th>
-                    </tr>
-                    {
-                        CartLoadingError ? 'Can\'t load the cart'
+        <div className='container flex gap-10 mt-[10%]'>
+            <div className='container flex flex-col gap-10 left'>
+                <div className='headings flex item-left justify-around text-slate-400 font-[Montserrat] font-light'>
+                    <p>product</p>
+                    <p>quantity</p>
+                    <p>price</p>
+                </div>
+                {
+                    CartLoadingError ? 'Can\'t load the cart'
+                        :
+                        CartLoading ? 'Loading...'
                             :
-                            CartLoading ? 'Loading...'
-                                :
-                                CartData.map(data =>
-                                    <tr key={data.id} className='flex item-center justify-between'>
-                                        <div className='w-[33%] flex flex-row justify-around item-center'>
-                                            <img className='w-[100px]' src={data.product_image} alt='product-image' />
-                                            <p>{data.product_title}</p>
+                            CartData.map(data =>
+                                <div key={data.product_id} className='cart-data flex justify-around'>
+                                    <div className='w-[35%] flex justify-around gap-2'>
+                                        <img className='w-[150px]' src={data.product_image} alt='product-image' />
+                                        <span className='flex m-auto'>{data.product_title}</span>
+                                    </div>
+                                    <div className='flex gap-5 m-auto'>
+                                        <div className='flex py-3 px-3 gap-3 border border-solid border-slate-500' onClick={(e) => updateQuantity(data, e)}>
+                                            <button className='btn bg-slate-300 px-2'>+</button>
+                                            <span className='price'>{data.product_quantity}</span>
+                                            <button className='btn bg-slate-300 px-2'>-</button>
                                         </div>
-                                        <div className='quantity w-[25%]'>
-                                            <td className='flex justify-left text-center'>
-                                                <button className='btn bg-slate-200 px-2' onClick={updateQuantity}>+</button>
-                                                <span>{data.product_price}</span>
-                                                <button className='btn bg-slate-200 px-2' onClick={updateQuantity}>-</button>
-                                            </td>
-                                        </div>
-                                        <div className='text-center flex justify-left'>
-                                            <p>{data.product_price}</p>
-                                        </div>
-                                    </tr>
-                                )
-                    }
-                </table>
+                                        <i
+                                            className="fa-regular fa-trash-can text-slate-500 m-auto"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                mutation.mutate(data);
+                                            }}>
+                                        </i>
+
+                                    </div>
+                                    <div className='flex border border-solid m-auto'>
+                                        <p>${data.product_quantity * data.product_price}</p>
+                                    </div>
+                                </div>
+                            )
+                }
             </div>
 
             <div className='right h-fit bg-slate-50 py-20 px-10'>

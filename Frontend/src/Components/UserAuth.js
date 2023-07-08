@@ -4,7 +4,8 @@ import { sendFormData } from './PostData';
 import { AuthContext } from './Context/authContext';
 
 const UserAuth = () => {
-    const{ setForm } = useContext(AuthContext);
+    const { setForm } = useContext(AuthContext);
+    const [successAuth, setSuccessAuth] = useState(true);
 
     const [isRegister, setIsRegister] = useState(true);
     const [registerForm, setRegisterForm] = useState({
@@ -37,9 +38,14 @@ const UserAuth = () => {
             }
             else {
                 if (response.status === 200) {
+                    setSuccessAuth(true);
                     localStorage.setItem('user', JSON.stringify(response.data));
-                    alert('User successfully logged in!');
-                    setForm();
+                    setTimeout(() => {
+                        setForm();
+                    }, 1500);
+                }
+                else{
+                    setSuccessAuth(false);
                 }
             }
         })
@@ -48,9 +54,17 @@ const UserAuth = () => {
     return (
         <div className="fixed h-fit w-1/2 top-[0] left-[25%] right-[25%] my-20 p-10 z-[2] bg-slate-100">
             <form className=" max-w-xl p-0" autoComplete="off" onSubmit={handleSubmit}>
-                <div className='text-3xl form-header flex mb-5'>
+                <div className='text-3xl form-header flex item-center justify-between mb-5'>
                     <span>Sign {isRegister ? 'Up' : 'In'}</span>
-                    <span className='cursor-pointer text-4xl ml-auto' onClick={() => setForm()}>&#9747;</span>
+                    {
+                        successAuth && 
+                        <div className='text-sm py-3'>
+                            <i className="fa-solid fa-circle-check text-[#12d943] mr-2"></i>
+                            <span>{isRegister ? 'Registered Successfully' : 'Logged in successfully'}</span>
+                        </div>
+                    }
+
+                    <span className='cursor-pointer text-4xl' onClick={() => setForm()}>&#9747;</span>
                 </div>
                 <div className={isRegister ? 'block' : 'hidden'}>
                     <label htmlFor="first-name" className="block text-sm font-semibold leading-6 text-gray-900">

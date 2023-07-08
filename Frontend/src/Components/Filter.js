@@ -43,7 +43,7 @@ const Filter = ({showFilters, setShowFilters, setProducts}) => {
     }
 
     return (
-        <div>
+        <div className='flex flex-col item-left ml-10'>
             <div className='filter-btn w-5' onClick={handleClick}>
                 <div className='btn bg-black h-1 my-1 w-inherit'></div>
                 <div className='btn bg-black h-1 my-1 w-inherit'></div>
