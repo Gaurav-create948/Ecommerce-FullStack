@@ -7,15 +7,15 @@ import Overlay from './Overlay'
 import { AuthContext } from './Context/authContext'
 
 
-const Home = (props) => {
+const Home = () => {
     const [showFilters, setShowFilters] = useState(false);
     const{showForm} = useContext(AuthContext);
 
     return (
         <div className='container mx-auto'>
             {showForm && <Overlay/>}
-            <Filter showFilters={showFilters} products = {props.products} setShowFilters={setShowFilters} setProducts={props.setProducts} />
-            <Main products={props.products} />
+            {/* <Filter showFilters={showFilters} products = {props.products} setShowFilters={setShowFilters} setProducts={props.setProducts} /> */}
+            <Main />
             {showForm && <UserAuth />}
         </div>
     )

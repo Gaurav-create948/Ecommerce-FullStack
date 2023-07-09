@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { sendFormData } from './PostData';
 import { AuthContext } from './Context/authContext';
+import { useNavigate } from 'react-router-dom';
 
 const UserAuth = () => {
     const { setForm } = useContext(AuthContext);
-    const [successAuth, setSuccessAuth] = useState(true);
+    const [successAuth, setSuccessAuth] = useState(false);
+    const [errorAuth, setErrorAuth] = useState(false);
 
-    const [isRegister, setIsRegister] = useState(true);
+    const [isRegister, setIsRegister] = useState(false);
     const [registerForm, setRegisterForm] = useState({
         username: '',
         email: '',
@@ -19,8 +21,12 @@ const UserAuth = () => {
         password: ''
     });
 
+    const navigate = useNavigate();
+
 
     function handleChange(e) {
+        e.preventDefault();
+        setErrorAuth(false);
         const { name, value } = e.target;
         if (isRegister) {
             setRegisterForm({ ...registerForm, [name]: value });
@@ -34,18 +40,22 @@ const UserAuth = () => {
         e.preventDefault();
         sendFormData(isRegister, (!isRegister ? loginForm : registerForm), (!isRegister ? setLoginForm : setRegisterForm), (error, response) => {
             if (error) {
-                console.error(error);
+                setErrorAuth(true);
             }
             else {
-                if (response.status === 200) {
+                if(isRegister && response.status === 200){
+                    setIsRegister(false);
+                }
+                else if (!isRegister && response.status === 200) {
                     setSuccessAuth(true);
                     localStorage.setItem('user', JSON.stringify(response.data));
                     setTimeout(() => {
                         setForm();
                     }, 1500);
+                    navigate(0);
                 }
                 else{
-                    setSuccessAuth(false);
+                    setErrorAuth(true);
                 }
             }
         })
@@ -61,6 +71,14 @@ const UserAuth = () => {
                         <div className='text-sm py-3'>
                             <i className="fa-solid fa-circle-check text-[#12d943] mr-2"></i>
                             <span>{isRegister ? 'Registered Successfully' : 'Logged in successfully'}</span>
+                        </div>
+                    }
+
+                    {
+                        errorAuth && 
+                        <div className='text-sm py-3'>
+                            <i className="fa-solid fa-circle-xmark text-[#f60404] mr-2"></i>
+                            <span>Please check email or password!</span>
                         </div>
                     }
 
@@ -111,7 +129,11 @@ const UserAuth = () => {
                     </button>
                 </div>
 
-                <div className='form-footer font-[Inter] text-blue-500 hover:text-blue-800 cursor-pointer' onClick={() => setIsRegister(prevValue => !prevValue)}>
+                <div className='form-footer font-[Inter] text-blue-500 hover:text-blue-800 cursor-pointer' 
+                onClick={(e) => {
+                    e.preventDefault();
+                    setIsRegister(prevValue => !prevValue)
+                }}>
                     {isRegister ? 'Already have an account? Sign in' : "Don't have account? Sign up"}
                 </div>
             </form>

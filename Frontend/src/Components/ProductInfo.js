@@ -7,6 +7,8 @@ import { useQuery, QueryClient } from 'react-query';
 import { AuthContext } from './Context/authContext';
 import Overlay from './Overlay';
 import UserAuth from './UserAuth';
+import { useDispatch } from 'react-redux';
+import { addItem } from './Store/cartSlice';
 
 
 // here i will show all the data.
@@ -15,6 +17,7 @@ const ProductInfo = () => {
   const [product, setProduct] = useState();
   const [card, setCard] = useState(false);
   const { showForm, currentUser, setForm } = useContext(AuthContext);
+  const dispatch = useDispatch();
 
 
   useEffect(() => {
@@ -57,7 +60,7 @@ const ProductInfo = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   if (currentUser) {
-                      console.log(currentUser);
+                      dispatch(addItem(product));
                       addToCart();
                       setCard(true);
                   } else {

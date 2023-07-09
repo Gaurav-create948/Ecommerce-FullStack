@@ -27,7 +27,7 @@ const App = () => {
     return (
       // <QueryClientProvider client={queryClient}>
         <div className='main'>
-          <Navbar setProducts={setProducts} />
+          <Navbar />
           <div>
             <Outlet/>
           </div>
@@ -36,17 +36,6 @@ const App = () => {
     )
   }
 
-  const [products, setProducts] = useState([]);
-
-
-  const { isLoading : ProductsLoading, error : ProductsGetError, data : Products } = useQuery('products', async () => {
-    try {
-      const response = await axios.get('https://fakestoreapi.com/products');
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  })
 
 
   const router = createBrowserRouter([
@@ -56,10 +45,7 @@ const App = () => {
       children: [
         {
           path: "/",
-          element: ProductsLoading ? 
-                    <CircularProgress color='inherit' className='mx-auto'/> 
-                    : 
-                    <Home products={Products} setProducts={setProducts}/>
+          element: <Home />
         },
         {
           path: '/product/:_id',

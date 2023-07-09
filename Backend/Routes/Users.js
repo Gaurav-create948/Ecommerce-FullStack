@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const validator = require('validator');
 // const { Register, Login, getUserInfo, Logout} = require('../Controller/UserAuth');
-const {Register, Login} = require('../Controller/user');
+const {Register, Login, Logout} = require('../Controller/user');
 
 // Protect route before registering the user
 function checkBeforeRegister(req , res, next){
@@ -41,5 +41,8 @@ app.route('/register')
 
 app.route('/login')
 .post(checkBeforLogin, Login)
+
+app.route('/logout')
+.post(Logout)
 
 module.exports = app;

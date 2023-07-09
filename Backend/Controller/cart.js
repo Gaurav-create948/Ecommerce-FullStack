@@ -26,42 +26,47 @@ const addToCart = async (req, res) => {
 
 const getCart = async (req, res) => {
     const { accessToken } = req.cookies;
-    const email = jwt.verify(accessToken, "mysecretkey");
-    const id = await getUSerId(email);
-
-    const query = "SELECT * FROM user_cart WHERE user_ref_id = (?)";
-
-    db.query(query, [id], (error, result) => {
-        if (error) return res.status(403).json(error);
-        else return res.status(200).json(result);
-    })
+    if(accessToken){
+        const email = jwt.verify(accessToken, "mysecretkey");
+        const id = await getUSerId(email);
+    
+        const query = "SELECT * FROM user_cart WHERE user_ref_id = (?)";
+    
+        db.query(query, [id], (error, result) => {
+            if (error) return res.status(403).json(error);
+            else return res.status(200).json(result);
+        })
+    }
+    else{
+        res.status(403).json('user not authorized');
+    }
 }
 
 const updateCart = (req, res) => {
-    const { newQuantity, user_id, product_id } = req.body.quantity;
+//     const { newQuantity, user_id, product_id } = req.body.data;
 
-    if (newQuantity === 0) {
-        const query = 'DELETE FROM user_cart WHERE user_ref_id = (?) AND product_id = (?)';
-        db.query(query, [user_id, product_id], (error, response) => {
-            if(error) return res.status(403).json(error);
-            else return res.status(200).json(response);
-        })
-    }
-    else {
-        const query = 'UPDATE user_cart SET product_quantity = (?) WHERE user_ref_id = (?) AND product_id = (?)';
+//     if (newQuantity === 0) {
+//         const query = 'DELETE FROM user_cart WHERE user_ref_id = (?) AND product_id = (?)';
+//         db.query(query, [user_id, product_id], (error, response) => {
+//             if(error) return res.status(403).json(error);
+//             else return res.status(200).json(response);
+//         })
+//     }
+//     else {
+//         const query = 'UPDATE user_cart SET product_quantity = (?) WHERE user_ref_id = (?) AND product_id = (?)';
 
-        db.query(query, [newQuantity, user_id, product_id], (error, response) => {
-            if (error) return res.status(403).json(error);
-            else return res.status(200).json(response);
-        })
-    }
+//         db.query(query, [newQuantity, user_id, product_id], (error, response) => {
+//             if (error) return res.status(403).json(error);
+//             else return res.status(200).json(response);
+//         })
+//     }
 }
 
 
 const deleteCartItem = (req, res) => {
-    const {user_ref_id, product_id} = req.body.data;
+    const {user_id, product_id} = req.body;
     const query = 'DELETE FROM user_cart WHERE user_ref_id = (?) AND product_id = (?)';
-    db.query(query, [user_ref_id, product_id], (error, response)=>{
+    db.query(query, [user_id, product_id], (error, response)=>{
         if(error) return res.status(403).json(error);
         else return res.status(200).json(response);
     });
