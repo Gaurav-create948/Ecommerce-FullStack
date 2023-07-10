@@ -32,10 +32,10 @@ async function Register(req, res) {
 // login controller
 async function Login(req, res) {
     const { email, password } = req.body;
-    console.log(email, password);
-    // const query = `select * from user_data where user_email = (?)`;
-    // db.query(query, [email], (error, data) => {
-    //     if (error) return res.status(404).json(error);
+    const query = `select * from user_data where user_email = (?)`;
+    db.query(query, [email], (error, data) => {
+        if (error) console.log(error);
+        else console.log(data);
     //     if (data.length === 0) return res.status(500).json('user not exist');
     //     const checkPass = bycrypt.compare(req.body.password, data[0].password);
     //     if (!checkPass) return res.status(400).json('wrong password');
@@ -48,7 +48,7 @@ async function Login(req, res) {
     //     })
     //         .status(200)
     //         .json(data[0].user_email);
-    // })
+    })
 };
 
 
