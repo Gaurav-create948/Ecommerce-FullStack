@@ -20,10 +20,14 @@ const db = require('./DB');
 const User = require('./Routes/Users');
 const Cart = require('./Routes/Cart');
 
+app.get('/', (req, res) => {
+    console.log('getting request!');
+})
 
 // inserting data into the userdb
 app.use('/', User);
 app.use('/', Cart);
+
 
 // App server is running
 app.listen(PORT, function(err){
