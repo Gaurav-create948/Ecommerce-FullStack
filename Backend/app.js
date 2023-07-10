@@ -1,7 +1,7 @@
 // Frameworks and basics things
 const express = require('express');
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 const cors = require('cors');
 const cookie = require('cookie-parser');
 
@@ -19,21 +19,6 @@ const db = require('./DB');
 const User = require('./Routes/Users');
 const Cart = require('./Routes/Cart');
 
-// 'http://localhost:5000/getUserCart'
-
-// this is working fine.
-app.get('/', (req, res) => {
-    const query = 'select * from user_data';
-    db.query(query, (err, result) => {
-        if(err){
-            console.log(err);
-        }
-        else{
-            console.log(result);
-            res.json(result);
-        }
-    })
-})
 
 // inserting data into the userdb
 app.use('/', User);
