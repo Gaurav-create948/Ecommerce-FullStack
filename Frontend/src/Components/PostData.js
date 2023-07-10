@@ -2,7 +2,7 @@ import axios from 'axios';
 
 async function registerUser(dataObject, setDataObjects) {
     try {
-        const res = await axios.post('http://localhost:5000/register', dataObject, {withCredentials:true});
+        const res = await axios.post('https://ecommerce-app-jof9.onrender.com/register', dataObject, {withCredentials:true});
         if (res.status === 200) {
             setDataObjects(() => ({
                 username: '',
@@ -19,7 +19,7 @@ async function registerUser(dataObject, setDataObjects) {
 
 async function loginUser(dataObject, setDataObjects) {
     try {
-        const res = await axios.post('http://localhost:5000/login', dataObject, {withCredentials: true});
+        const res = await axios.post('https://ecommerce-app-jof9.onrender.com/login', dataObject, {withCredentials: true});
         if (res.status === 200) {
             setDataObjects(() => ({
                 email: '',

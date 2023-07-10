@@ -34,7 +34,7 @@ const ProductInfo = () => {
 
   async function addToCart() {
     try {
-      const res = await axios.post('http://localhost:5000/product/cart', { product, currentUser });
+      const res = await axios.post('https://ecommerce-app-jof9.onrender.com/cart', { product, currentUser });
     } catch (error) {
       console.log(error);
     }

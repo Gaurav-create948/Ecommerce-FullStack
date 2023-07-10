@@ -29,7 +29,7 @@ const Navbar = ({ setProducts }) => {
 
   function logoutUser(){
     localStorage.removeItem('user');
-    axios.post('http://localhost:5000/logout', { }, {withCredentials:true});
+    axios.post('https://ecommerce-app-jof9.onrender.com/logout', { }, {withCredentials:true});
     navigate(0);
   }
 

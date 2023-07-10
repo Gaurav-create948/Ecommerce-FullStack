@@ -13,7 +13,7 @@ const UserCart = () => {
     useEffect(() => {
         async function getCartData() {
             try {
-                const { data } = await axios.get('http://localhost:5000/cart', { withCredentials: true });
+                const { data } = await axios.get('https://ecommerce-app-jof9.onrender.com/cart', { withCredentials: true });
                 dispatch(setCart(data));
             }
             catch (error) {
@@ -36,7 +36,7 @@ const UserCart = () => {
     }
 
     function deleteItem(user_id, product_id){
-        axios.patch('http://localhost:5000/cart/deleteCartItem', {user_id, product_id});
+        axios.patch('https://ecommerce-app-jof9.onrender.com/deleteCartItem', {user_id, product_id});
     }
 
     return (
