@@ -7,7 +7,7 @@ const cookie = require('cookie-parser');
 
 
 app.use(cors({
-    origin : 'http://localhost:3000',
+    origin : 'https://ecommerce-app-gaurav.netlify.app/',
     credentials : true
 }));
 app.use(cookie());
