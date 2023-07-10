@@ -21,7 +21,7 @@ const User = require('./Routes/Users');
 const Cart = require('./Routes/Cart');
 
 app.get('/', (req, res) => {
-    console.log('getting request!');
+    res.send('Hello gaurav');
 })
 
 // inserting data into the userdb

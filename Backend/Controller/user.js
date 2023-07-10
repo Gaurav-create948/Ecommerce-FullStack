@@ -32,22 +32,23 @@ async function Register(req, res) {
 // login controller
 async function Login(req, res) {
     const { email, password } = req.body;
-    const query = `select * from user_data where user_email = (?)`;
-    db.query(query, [email], (error, data) => {
-        if (error) return res.status(404).json(error);
-        if (data.length === 0) return res.status(500).json('user not exist');
-        const checkPass = bycrypt.compare(req.body.password, data[0].password);
-        if (!checkPass) return res.status(400).json('wrong password');
+    console.log(email, password);
+    // const query = `select * from user_data where user_email = (?)`;
+    // db.query(query, [email], (error, data) => {
+    //     if (error) return res.status(404).json(error);
+    //     if (data.length === 0) return res.status(500).json('user not exist');
+    //     const checkPass = bycrypt.compare(req.body.password, data[0].password);
+    //     if (!checkPass) return res.status(400).json('wrong password');
 
-        const token = Jwt.sign(data[0].user_email, "mysecretkey");
+    //     const token = Jwt.sign(data[0].user_email, "mysecretkey");
 
-        res.cookie("accessToken", token, {
-            httpOnly : true,
-            secure : false
-        })
-            .status(200)
-            .json(data[0].user_email);
-    })
+    //     res.cookie("accessToken", token, {
+    //         httpOnly : true,
+    //         secure : false
+    //     })
+    //         .status(200)
+    //         .json(data[0].user_email);
+    // })
 };
 
 
