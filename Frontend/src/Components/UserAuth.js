@@ -40,6 +40,7 @@ const UserAuth = () => {
         e.preventDefault();
         sendFormData(isRegister, (!isRegister ? loginForm : registerForm), (!isRegister ? setLoginForm : setRegisterForm), (error, response) => {
             if (error) {
+                console.log(error);
                 setErrorAuth(true);
             }
             else {

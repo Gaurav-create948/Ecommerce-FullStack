@@ -30,6 +30,7 @@ async function loginUser(dataObject, setDataObjects) {
             throw new Error(res.status);
         }
     } catch (error) {
+        console.log(error);
         return error;
     }
 }

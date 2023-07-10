@@ -32,10 +32,12 @@ async function Register(req, res) {
 // login controller
 async function Login(req, res) {
     const { email, password } = req.body;
+    console.log("This is email and password", email, password);
     const query = `select * from user_data where user_email = (?)`;
+    console.log("This is query -> ", query);
     db.query(query, [email], (error, data) => {
-        if (error) console.log(error);
-        else console.log(data);
+        if (error) console.log("This is error -> ", error);
+        else console.log("This is data -> ", data);
     //     if (data.length === 0) return res.status(500).json('user not exist');
     //     const checkPass = bycrypt.compare(req.body.password, data[0].password);
     //     if (!checkPass) return res.status(400).json('wrong password');
