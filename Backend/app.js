@@ -6,18 +6,11 @@ const cors = require('cors');
 const cookie = require('cookie-parser');
 
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://ecommerce-app-gaurav.netlify.app');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-  
-    next();
-  });
 app.use(cors({
     origin : 'https://ecommerce-app-gaurav.netlify.app/',
     credentials : true
 }));
+app.use('*', cors());
 app.use(cookie());
 app.use(express.json());
 
